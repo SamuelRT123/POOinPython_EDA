@@ -20,5 +20,19 @@ T = TypeVar("T")
 
 @dataclass
 class scht(Generic[T]):
-    pass
+    _capacity: int = None # Tamaño inicial de la tabla
+    _size: int = 0  # Número de elementos almacenados
+    _buckets: List[Optional[linkedlist.LinkedList]] = None
+    _hash_function: Callable[[T], int] = field(default_factory=lambda: hash)
+    
+    def __post_init__(self):
+        
+        if self._capacity is None:
+            self._capacity = 10
+            
+        """Inicializa las listas enlazadas en cada bucket."""
+        for i in range(self._capacity):
+            
+            self._buckets[i] = linkedlist.LinkedList()
+        
     
