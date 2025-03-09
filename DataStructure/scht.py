@@ -77,3 +77,26 @@ class scht(Generic[T]):
         return self.search(key) is not None
     
     
+
+if __name__ == "__main__":
+    # Crear una tabla hash con capacidad inicial de 5
+    hash_table = scht[int](_capacity=5)
+
+        # Insertar elementos en la tabla hash
+    hash_table.insert(1, "uno")
+    hash_table.insert(2, "dos")
+    hash_table.insert(3, "tres")
+    hash_table.insert(4, "Colombia")
+
+    print(hash_table)
+        # Buscar elementos en la tabla hash
+    print(hash_table.search(1))  # Salida: "uno"
+    print(hash_table.search(4))  # Salida: None
+
+        # Verificar si una clave está en la tabla hash
+    print(1 in hash_table)  # Salida: True
+    print(4 in hash_table)  # Salida: False
+
+    print(hash_table.values())
+        # Verificar el tamaño de la tabla hash
+    print(len(hash_table))  # Salida: 2
