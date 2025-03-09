@@ -23,7 +23,10 @@ class scht(Generic[T]):
     _capacity: int = None # Tamaño inicial de la tabla
     _size: int = 0  # Número de elementos almacenados
     _buckets: List[Optional[linkedlist]] = None
+    
+    #Función hash por defecto, cambiarla por la del curso.
     _hash_function: Callable[[T], int] = field(default_factory=lambda: hash)
+    
     
     def __post_init__(self):
         
@@ -40,23 +43,37 @@ class scht(Generic[T]):
         """Calcula el índice del bucket para una clave dada."""
         return self._hash_function(key) % self._capacity
 
-    def insert(self, key: T, value: T) -> None:
-        """Inserta un nuevo elemento en la tabla hash."""
-        index = self._bucket_index(key)
-        bucket = self._buckets[index]
-        bucket.add_last(value)
-        self._size += 1
-
-    def search(self, key: T) -> Optional[T]:
-        """Busca un elemento en la tabla hash y devuelve su valor si se encuentra."""
+    def put(self, key: T, value: T) -> None:
+        """Inserta un par clave-valor en la tabla hash."""
         index = self._bucket_index(key)
         bucket = self._buckets[index]
         
-        #Perdon xd, ya esta tarde
         for i in range(len(bucket)):
-            if bucket.get_element(i) == key:
-                return bucket.get(i)
+            if bucket.get_element(i)[0] == key:
+                bucket.get_element(i)[1] = value
+                return
+        
+        bucket.add_first((key, value))
+        self._size += 1
+
+    def get(self, key: T) -> Optional[T]:
+        """Devuelve el valor asociado con una clave en la tabla hash."""
+        index = self._bucket_index(key)
+        bucket = self._buckets[index]
+        
+        for i in range(len(bucket)):
+            if bucket.get_element(i)[0] == key:
+                return bucket.get_element(i)[1]
+        
         return None
+    
+    def keys(self) -> List[T]:
+        """Devuelve una lista de todas las claves en la tabla hash."""
+        keys_list = linkedlist()
+        for bucket in self._buckets:
+            for i in range(len(bucket)):
+                keys_list.add_first(bucket.get_element(i)[0])
+        return keys_list
     
     
     
@@ -83,20 +100,18 @@ if __name__ == "__main__":
     hash_table = scht[int](_capacity=5)
 
         # Insertar elementos en la tabla hash
-    hash_table.insert(1, "uno")
-    hash_table.insert(2, "dos")
-    hash_table.insert(3, "tres")
-    hash_table.insert(4, "Colombia")
+    hash_table.put(1, "uno")
+    hash_table.put(2, "dos")
+    hash_table.put(3, "tres")
+    hash_table.put(4, "Colombia")
 
-    print(hash_table)
-        # Buscar elementos en la tabla hash
-    print(hash_table.search(1))  # Salida: "uno"
-    print(hash_table.search(4))  # Salida: None
+    print(hash_table.keys())
+    # Buscar elementos en la tabla hash
+    print("Buscando elementos en la tabla hash:")
+    print(hash_table.get(1))  # Salida: "uno"
+    print(hash_table.get(4))  # Salida: Colombia
+    print(hash_table.get(5))  # Salida: None
 
-        # Verificar si una clave está en la tabla hash
-    print(1 in hash_table)  # Salida: True
-    print(4 in hash_table)  # Salida: False
-
-    print(hash_table.values())
+    #print(hash_table.values()) #Otra lista similar a keys pero con las llaves.
         # Verificar el tamaño de la tabla hash
-    print(len(hash_table))  # Salida: 2
+    print(len(hash_table))  # Salida: 4
