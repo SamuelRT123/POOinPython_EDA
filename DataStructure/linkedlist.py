@@ -11,9 +11,12 @@ Este ADT representa una estructura de datos lineal, específicamente una lista s
 # import dataclass to define the array list
 from dataclasses import dataclass
 # import modules for defining the element's type in the array
-from typing import List, Optional, Callable, Generic
+from typing import List, Optional, Callable, Generic, TypeVar
 # import inspect for getting the name of the current function
 import inspect
+from ltnode import SingleNode
+
+T=TypeVar("T")
 
 @dataclass
 class SingleLinked(Generic[T]):
@@ -75,7 +78,7 @@ class SingleLinked(Generic[T]):
             # i = 0
             # if the key is not defined, use the default
             if self.key is None:
-                self.key = DFLT_DICT_KEY     # its "id" by default
+                self.key = 'id'     # its "id" by default
             # if the compare function is not defined, use the default
             if self.cmp_function is None:
                 self.cmp_function = self.dflt_cmp_function
@@ -83,7 +86,7 @@ class SingleLinked(Generic[T]):
             if self.first is None:
                 self.last = self.first
             # if input data is iterable add them to the SingleLinkedList
-            if isinstance(self.iodata, VALID_IO_TYPE):
+            if isinstance(self.iodata, list):
                 for elm in self.iodata:
                     self.add_last(elm)
             self.iodata = None
@@ -103,7 +106,7 @@ class SingleLinked(Generic[T]):
         # TODO check the usability of the try, except block
         try:
             # passing self,key as the first argument to the default cmp function
-            return lt_dflt_cmp_function(self.key, elm1, elm2)
+            return (elm1 > elm2) - (elm1 < elm2)
         except Exception as err:
             self._handle_error(err)
 
@@ -117,7 +120,7 @@ class SingleLinked(Generic[T]):
         """
         cur_context = self.__class__.__name__
         cur_function = inspect.currentframe().f_code.co_name
-        error_handler(cur_context, cur_function, err)
+        raise err
 
     def _check_type(self, element: T) -> bool:
         """*_check_type()* función propia de la estructura que revisa si el tipo de dato del elemento que se desea agregar al *SingleLinked* es del mismo tipo contenido dentro de los elementos del *SingleLinked*.

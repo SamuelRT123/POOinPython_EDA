@@ -12,8 +12,9 @@ Este ADT representa un nodo **Node** de información de una estructura de datos 
 # import dataclass for defining the node class
 from dataclasses import dataclass
 # import modules for defining the Node type
-from typing import Generic, Optional
+from typing import Generic, Optional, TypeVar
 
+T= TypeVar("T")
 
 @dataclass
 class Node(Generic[T]):
