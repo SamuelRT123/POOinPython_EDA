@@ -1,12 +1,12 @@
 class Cajero:
     def __init__(self, nombre: str, sueldo: float):
         self.nombre = nombre
-        self.sueldo = sueldo
+        self._sueldo = sueldo
         self.ventas = 0
 
     def vender(self, monto: float):
         self.ventas += 1
-        self.sueldo += monto * 0.6
+        self._sueldo += monto * 0.6
 
     def get_ventas(self) -> int:
         return self.ventas
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     cajero.vender(300)
     print("*** Bienvenido a la tienda,", tienda.get_nombre(), " ***")
     print("Calcular ventas:", tienda.calcular_ventas())
-    print("Sueldo del cajero Juan:",cajero.sueldo)
+    print("Sueldo del cajero Juan:",cajero._sueldo)
     cajero.vender(400)
     print("Juan realizo una venta de 400:",tienda.calcular_ventas())
     print("El nuevo sueldo de Juan",cajero.sueldo)
